@@ -2,11 +2,19 @@ package com.ensa.gi4.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import com.ensa.gi4.dao.api.IDao;
 import com.ensa.gi4.modele.Materiel;
 import com.ensa.gi4.service.api.GestionMaterielService;
 
+@Service("livre")
 public class LivreService implements GestionMaterielService{
+	@Autowired
+	@Qualifier("livreDao")
 	IDao livreDao;
     
 	public void setLivreDao(IDao livreDao) {

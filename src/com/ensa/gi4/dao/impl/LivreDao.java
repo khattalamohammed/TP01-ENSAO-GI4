@@ -3,9 +3,14 @@ package com.ensa.gi4.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
 import com.ensa.gi4.dao.api.IDao;
 import com.ensa.gi4.modele.Materiel;
 
+@Repository("livreDao")
 public class LivreDao implements IDao{
 	List<Materiel> livres;
 	public LivreDao() {

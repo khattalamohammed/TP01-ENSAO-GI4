@@ -3,22 +3,32 @@ package com.ensa.gi4.controller;
 import com.ensa.gi4.modele.Livre;
 import com.ensa.gi4.modele.Materiel;
 import com.ensa.gi4.service.api.GestionMaterielService;
+import com.ensa.gi4.service.api.GestionMaterielServiceFacade;
 
 import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-public class GestionMaterielController implements ApplicationContextAware{
-	private ApplicationContext APPLICATION_CONTEXT;
-    private GestionMaterielService service;
+@Controller
+@ComponentScan
+public class GestionMaterielController {
+	
+    @Autowired
+    @Qualifier("facade")
+    private GestionMaterielServiceFacade gestionMaterielServiceFacade;
     private Materiel materiel;
 	
 	public void afficherMenu() {
-        System.out.println("1- AFFICHER");
-        System.out.println("2- AJOUTER");
+        System.out.println("1- AJOUTER");
+        System.out.println("2- AFFICHER");
         System.out.println("3- MODIFIER");
         System.out.println("4- SUPPRIMER");
         System.out.println("5- CHERCHER");
@@ -35,18 +45,18 @@ public class GestionMaterielController implements ApplicationContextAware{
         	System.out.println("1-pour livre 2-pour chaise");
             mat = scanner.next();
             if(mat.equals("1")) {
-            	afficherMateriel("livre");
+            	gestionMaterielServiceFacade.ajouterNouveauMateriel("livre", "spring");
             }else {
-            	afficherMateriel("chaise");
+            	gestionMaterielServiceFacade.ajouterNouveauMateriel("chaise", "popopopo");
             }
             break;
         case "2":
         	System.out.println("1-pour livre 2-pour chaise");
              mat = scanner.next();
              if(mat.equals("1")) {
-             	ajouterMateriel("livre");
+             	gestionMaterielServiceFacade.afficherMateriel("livre");
              }else {
-             	ajouterMateriel("chaise");
+             	gestionMaterielServiceFacade.afficherMateriel("chaise");
              }
              break;
         case "3":
@@ -58,18 +68,14 @@ public class GestionMaterielController implements ApplicationContextAware{
         	System.out.println("1-pour livre 2-pour chaise");
             mat = scanner.next();
             if(mat.equals("1")) {
-             	supprimerMateriel("livre");
              }else {
-             	supprimerMateriel("chaise");
              }
             break;
         case "5":
         	System.out.println("1-pour livre 2-pour chaise");
             mat = scanner.next();
             if(mat.equals("1")) {
-             	chercherMateriel("livre");
              }else {
-             	chercherMateriel("chaise");
              }
             break;
         case "6":
@@ -97,66 +103,56 @@ public class GestionMaterielController implements ApplicationContextAware{
 		System.out.println("saisir le nom du materiel");
     	Scanner scanner = new Scanner(System.in);
     	String name=scanner.next();
-		if(type.equals("livre")) {
-    	materiel=(Materiel) APPLICATION_CONTEXT.getBean("livre");
-    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("livreService");
-    	materiel.setName(name);
-    	service.ajouterNouveauMateriel(materiel);
-		}
-		else if(type.equals("chaise")) {
-	    	materiel=(Materiel) APPLICATION_CONTEXT.getBean("chaise");
-	    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("chaiseService");
-	    	materiel.setName(name);
-	    	service.ajouterNouveauMateriel(materiel);
-			}
+    	gestionMaterielServiceFacade.ajouterNouveauMateriel(type, name);
+		
     }
-	public void chercherMateriel(String type) {
-		System.out.println("saisir l'id du materiel");
-    	Scanner scanner = new Scanner(System.in);
-    	int  id=scanner.nextInt();
-		if(type.equals("livre")) {
-    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("livreService");
-    	materiel=service.chercherMateriel(id);
-    	System.out.println(materiel.getName());
-		}
-		else if(type.equals("chaise")) {
-	    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("chaiseService");
-	    	materiel=service.chercherMateriel(id);
-	    	System.out.println(materiel.getName());
-			}
-    	
-    }
-	public void afficherMateriel(String type) {
-		if(type.equals("livre")) {
-	    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("livreService");
-	    	for(Materiel materiel:service.listerMateriel()) {
-				System.out.println(materiel.getName());
-			}
-			}
-			else if(type.equals("chaise")) {
-		    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("chaiseService");
-		    	for(Materiel materiel:service.listerMateriel()) {
-					System.out.println(materiel.getName());
-				}
-				}
-	
-	}
-	public void supprimerMateriel(String type) {
-		System.out.println("saisir l'id du materiel");
-    	Scanner scanner = new Scanner(System.in);
-    	int  id=scanner.nextInt();
-		if(type.equals("livre")) {
-    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("livreService");
-    	service.supprimerMateriel(id);
-		}
-		else if(type.equals("chaise")) {
-	    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("chaiseService");
-	    	service.supprimerMateriel(id);
-			}
-	}
-	@Override
-	public void setApplicationContext(ApplicationContext arg0) throws BeansException {
-		// TODO Auto-generated method stub
-		this.APPLICATION_CONTEXT=arg0;
-	}
+//	public void chercherMateriel(String type) {
+//		System.out.println("saisir l'id du materiel");
+//    	Scanner scanner = new Scanner(System.in);
+//    	int  id=scanner.nextInt();
+//		if(type.equals("livre")) {
+//    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("livreService");
+//    	materiel=service.chercherMateriel(id);
+//    	System.out.println(materiel.getName());
+//		}
+//		else if(type.equals("chaise")) {
+//	    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("chaiseService");
+//	    	materiel=service.chercherMateriel(id);
+//	    	System.out.println(materiel.getName());
+//			}
+//    	
+//    }
+//	public void afficherMateriel(String type) {
+//		if(type.equals("livre")) {
+//	    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("livreService");
+//	    	for(Materiel materiel:service.listerMateriel()) {
+//				System.out.println(materiel.getName());
+//			}
+//			}
+//			else if(type.equals("chaise")) {
+//		    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("chaiseService");
+//		    	for(Materiel materiel:service.listerMateriel()) {
+//					System.out.println(materiel.getName());
+//				}
+//				}
+//	
+//	}
+//	public void supprimerMateriel(String type) {
+//		System.out.println("saisir l'id du materiel");
+//    	Scanner scanner = new Scanner(System.in);
+//    	int  id=scanner.nextInt();
+//		if(type.equals("livre")) {
+//    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("livreService");
+//    	service.supprimerMateriel(id);
+//		}
+//		else if(type.equals("chaise")) {
+//	    	service=(GestionMaterielService) APPLICATION_CONTEXT.getBean("chaiseService");
+//	    	service.supprimerMateriel(id);
+//			}
+//	}
+//	@Override
+//	public void setApplicationContext(ApplicationContext arg0) throws BeansException {
+//		// TODO Auto-generated method stub
+//		this.APPLICATION_CONTEXT=arg0;
+//	}
 }
