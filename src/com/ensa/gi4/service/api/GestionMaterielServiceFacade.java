@@ -1,7 +1,9 @@
 package com.ensa.gi4.service.api;
 
+import com.ensa.gi4.modele.TypeMateriel;
+
 public interface GestionMaterielServiceFacade {
 
-	void ajouterNouveauMateriel(String type, String name);
-    void afficherMateriel(String type);
+    void afficherMateriel(TypeMateriel type);
+	void ajouterNouveauMateriel(TypeMateriel type, String name);
 }

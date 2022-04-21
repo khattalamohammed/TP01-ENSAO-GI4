@@ -2,10 +2,12 @@ package com.ensa.gi4.controller;
 
 import com.ensa.gi4.modele.Livre;
 import com.ensa.gi4.modele.Materiel;
+import com.ensa.gi4.modele.TypeMateriel;
 import com.ensa.gi4.service.api.GestionMaterielService;
 import com.ensa.gi4.service.api.GestionMaterielServiceFacade;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.BeansException;
@@ -33,6 +35,7 @@ public class GestionMaterielController {
         System.out.println("4- SUPPRIMER");
         System.out.println("5- CHERCHER");
         System.out.println("0- pour sortir de l'application, entrer 0");
+        
         Scanner scanner = new Scanner(System.in);
         String operation = scanner.next();
         String mat;
@@ -42,23 +45,56 @@ public class GestionMaterielController {
         	sortirDeLApplication();
         	break;
         case "1":
-        	System.out.println("1-pour livre 2-pour chaise");
+        	System.out.println("1-pour livre \t 2-pour chaise");
             mat = scanner.next();
-            if(mat.equals("1")) {
-            	gestionMaterielServiceFacade.ajouterNouveauMateriel("livre", "spring");
-            }else {
-            	gestionMaterielServiceFacade.ajouterNouveauMateriel("chaise", "popopopo");
-            }
+            Optional<String> checkType = Optional.of(mat); 
+            
+            if (checkType.isPresent()) {
+            	
+            	System.out.println("Saisir le nom  : ");
+                String name = scanner.next(); 
+                Optional<String> checkMaterialName = Optional.of(name); 
+                
+                if (checkMaterialName.isPresent()) {
+                	
+                	if(mat.equals("1")) {
+                    	gestionMaterielServiceFacade.ajouterNouveauMateriel(TypeMateriel.LIVRE, checkMaterialName.get());
+                    }
+                	else if(mat.equals("2")) {
+                    	gestionMaterielServiceFacade.ajouterNouveauMateriel(TypeMateriel.CHAISE, checkMaterialName.get());
+                    }
+                	else {
+    					System.out.println("Le type " + mat + " n'est pas reconnu ");
+    				}
+    			}
+                else {
+					System.out.println("Nom du materiel invalide, ajout non effectué");
+				}
+                
+			}else {
+				System.out.println("Choix invalide ! ");
+			}
             break;
         case "2":
-        	System.out.println("1-pour livre 2-pour chaise");
-             mat = scanner.next();
-             if(mat.equals("1")) {
-             	gestionMaterielServiceFacade.afficherMateriel("livre");
-             }else {
-             	gestionMaterielServiceFacade.afficherMateriel("chaise");
-             }
-             break;
+        	System.out.println("1-pour livre \t 2-pour chaise");
+            mat = scanner.next();
+            Optional<String> checkType1 = Optional.of(mat); 
+            
+            if (checkType1.isPresent()) {
+    
+            	if(checkType1.get().equals("1")) {
+                 	gestionMaterielServiceFacade.afficherMateriel(TypeMateriel.LIVRE);
+                 }
+            	else if(checkType1.get().equals("2")) {
+                 	gestionMaterielServiceFacade.afficherMateriel(TypeMateriel.CHAISE);
+                 }
+            	else {
+                	 System.out.println("Le type " + checkType1.get() + " n'est pas reconnu ");
+				}
+			}else {
+				System.out.println("Choix invalide ! ");
+			}
+            break;
         case "3":
         	System.out.println("1-pour livre 2-pour chaise");
             mat = scanner.next();
@@ -95,17 +131,19 @@ public class GestionMaterielController {
     }
 
     private void sortirDeLApplication() {
+    	System.out.println("Fin du programme ! ");
         System.exit(0);
     }
 
-	public void ajouterMateriel(String type) {
+	/*public void ajouterMateriel(String type) {
 		//Materiel materiel=new Livre();
 		System.out.println("saisir le nom du materiel");
     	Scanner scanner = new Scanner(System.in);
     	String name=scanner.next();
     	gestionMaterielServiceFacade.ajouterNouveauMateriel(type, name);
 		
-    }
+    }*/
+	
 //	public void chercherMateriel(String type) {
 //		System.out.println("saisir l'id du materiel");
 //    	Scanner scanner = new Scanner(System.in);

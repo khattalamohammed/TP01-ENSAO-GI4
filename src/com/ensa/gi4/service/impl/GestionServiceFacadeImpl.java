@@ -24,43 +24,51 @@ public class GestionServiceFacadeImpl implements GestionMaterielServiceFacade {
 	private GestionMaterielService chaiseMaterielService;
 
 	@Override
-	public void ajouterNouveauMateriel(String type, String name) {
+	public void ajouterNouveauMateriel(TypeMateriel type, String name) {
 		final Materiel materiel;
 		final GestionMaterielService serviceActuel;
 
-		if (type.equals("livre")) {
+		
+		switch (type){
+		case LIVRE: 
 			materiel = new Livre();
 			serviceActuel = livreMaterielService;
-		} else if (type.equals("chaise")) {
+			break; 
+		case CHAISE : 
 			materiel = new Chaise();
 			serviceActuel = chaiseMaterielService;
-
-		} else {
+			break; 
+		default:
 			System.out.println("Le type " + type + " n'est pas reconnu");
 			return;
 		}
+		
 		materiel.setName(name);
 		serviceActuel.ajouterNouveauMateriel(materiel);
 	}
 
 	@Override
-	public void afficherMateriel(String type) {
+	public void afficherMateriel(TypeMateriel type) {
 		final GestionMaterielService serviceActuel;
 		List<Materiel> materiels;
-
-		if (type.equals("livre")) {
+		
+		
+		switch (type){
+		case LIVRE: 
 			serviceActuel = livreMaterielService;
-		} else if (type.equals("chaise")) {
+			break; 
+		case CHAISE : 
 			serviceActuel = chaiseMaterielService;
-
-		} else {
+			break; 
+		default:
 			System.out.println("Le type " + type + " n'est pas reconnu");
 			return;
 		}
-		
+
 		 materiels=serviceActuel.listerMateriel();
 		 for (Materiel materiel : materiels) {
-			System.out.println(materiel.getName());
+			System.out.println( materiel.getName());
+			
 		}
 	}
 
