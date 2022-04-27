@@ -14,20 +14,20 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("all")
 @ComponentScan
 public class AppGestionMateriel {
-    private static final ApplicationContext APPLICATION_CONTEXT;
+	private static final ApplicationContext APPLICATION_CONTEXT;
 
-    static { // bloc static pour initilialisation
-       // String [] files = new String[]{"/beans/annotation-config-context.xml"};
-        APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(AppGestionMateriel.class);
-    }
 
-    public static void main(String[] args) {
-        final GestionMaterielController gestionMaterielController = (GestionMaterielController) APPLICATION_CONTEXT.getBean("controllerPricipal");
-        final ApplicationPublisher publisher = APPLICATION_CONTEXT.getBean(ApplicationPublisher.class);
-        publisher.publish(new MyEvent<>(new Livre(), EventType.ADD));
-        while (true) { // pour que l'appliation tourne jusqu'à la demande de l'utilisateur de l'arrêter
-            gestionMaterielController.afficherMenu();
-        }
+	static { // bloc static pour initilialisation
+		APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(AppGestionMateriel.class);
+	}
 
-    }
+	public static void main(String[] args) {
+		//APPLICATION_CONTEXT.refresh();
+		GestionMaterielController gestionMaterielController = APPLICATION_CONTEXT
+				.getBean(GestionMaterielController.class);
+		while (true) { // pour que l'appliation tourne jusqu'à la demande de l'utilisateur de
+						// l'arrêter
+			gestionMaterielController.afficherMenu();
+		}
+	}
 }
