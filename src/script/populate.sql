@@ -1,5 +1,5 @@
 
-INSERT INTO  materiel(name, code) values ( 'Livre' ,'LI'  );
-INSERT INTO  materiel(name, code) values ( 'Chaise' ,'CH'  );
+INSERT INTO  livre(name, code) values ( 'spring' ,'h000'  );
+INSERT INTO  livre(name, code) values ( 'java' ,'C88'  );
 
 

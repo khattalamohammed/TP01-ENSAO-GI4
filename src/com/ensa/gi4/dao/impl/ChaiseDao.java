@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -11,43 +12,36 @@ import com.ensa.gi4.dao.api.IDao;
 import com.ensa.gi4.modele.Materiel;
 
 @Repository("chaiseDao")
-public class ChaiseDao implements IDao {
-    List<Materiel> chaises;
-    public ChaiseDao() {
-    	chaises=new ArrayList<Materiel>();
-    }
+public class ChaiseDao extends GenericDAO implements IDao {
     
-	public List<Materiel> getChaises() {
-		return chaises;
-	}
-
-	public void setChaises(List<Materiel> chaises) {
-		this.chaises = chaises;
-	}
-
+	
 	@Override
 	public void add(Materiel materiel) {
-		chaises.add(materiel);
+		super.add("INSERT INTO CHAISE (NAME,CODE) VALUES (?,?)", materiel.getName(),materiel.getCode());	
 	}
 
 	@Override
 	public List<Materiel> get() {
-		return chaises;
+		return super.findAll("SELECT * FROM CHAISE;");
 	}
 
 	@Override
 	public void delete(int id) {
-		chaises.remove(id);
+		super.delete("DELETE FROM CHAISE WHERE ID = ?",id);
 	}
-
+ 
 	@Override
 	public void update(int id,Materiel materiel) {
-		chaises.set(id, materiel);
+		super.update("UPDATE CHAISE SET NAME = ?, CODE = ? WHERE ID = ?", id, materiel.getName(), materiel.getCode());
 	}
 
 	@Override
 	public Materiel search(int id) {
-		return chaises.get(id);
+		return super.getOne("SELECT * FROM CHAISE WHERE ID = ?",id);
 	}
 
+	@Override
+	protected RowMapper<Materiel> getRowMapper() {
+		return new ChaiseRowMapper();
+	}
 }

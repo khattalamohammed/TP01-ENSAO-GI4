@@ -1,25 +1,30 @@
 package com.ensa.gi4;
 
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-
-import javax.sql.DataSource;
-import java.sql.SQLException;
+import org.springframework.stereotype.Component;
 
 @Configuration
-public class DatabaseConfig {
-    @Value("${jdbc.url}")
+public class DbConfig {
+
+	@Value("${jdbc.url}")
     private String url;
     @Value("${jdbc.username}")
     private String username;
-    @Value("${jdbc.password}")
+   @Value("${jdbc.password}")
     private String password;
     @Value("${jdbc.driver}")
     private String driverClassName;
@@ -29,8 +34,7 @@ public class DatabaseConfig {
 
     @Value("${jbdc.populate.schema}")
     private String populateSchema;
-
-
+    
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -40,7 +44,6 @@ public class DatabaseConfig {
         dataSource.setPassword(password);
         executeScript(initSchema, dataSource);
         executeScript(populateSchema, dataSource);
-        //  lancerH2Console(); // si vous voulez lancer la console H2 après la création du datasource
         return dataSource;
     }
 

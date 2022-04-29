@@ -12,38 +12,34 @@ import com.ensa.gi4.modele.Materiel;
 import com.ensa.gi4.service.api.GestionMaterielService;
 
 @Service("chaise")
-public class ChaiseService implements GestionMaterielService{
+public class ChaiseService implements GestionMaterielService {
 	@Autowired
 	@Qualifier("chaiseDao")
-   IDao chaiseDao;
-   
-public void setChaiseDao(IDao chaiseDao) {
-	this.chaiseDao = chaiseDao;
-}
+	private IDao chaiseDao;
 
-@Override
-public List<Materiel> listerMateriel() {
-	return chaiseDao.get();
-}
+	@Override
+	public List<Materiel> listerMateriel() {
+		return chaiseDao.get();
+	}
 
-@Override
-public void ajouterNouveauMateriel(Materiel materiel) {
-	chaiseDao.add(materiel);
-}
+	@Override
+	public void ajouterNouveauMateriel(Materiel materiel) {
+		chaiseDao.add(materiel);
+	}
 
-@Override
-public void supprimerMateriel(int id) {
-	chaiseDao.delete(id);
-}
+	@Override
+	public void supprimerMateriel(int id) {
+		chaiseDao.delete(id);
+	}
 
-@Override
-public Materiel chercherMateriel(int id) {
-	return chaiseDao.search(id);
-}
+	@Override
+	public Materiel chercherMateriel(int id) {
+		return chaiseDao.search(id);
+	}
 
-@Override
-public void modifierMateriel(int id,Materiel materiel) {
-	chaiseDao.update(id, materiel);
-}
- 
+	@Override
+	public void modifierMateriel(int id, Materiel materiel) {
+		chaiseDao.update(id, materiel);
+	}
+
 }
